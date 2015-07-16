@@ -4,6 +4,13 @@ var SongQueueView = Backbone.View.extend({
 	tagName: "table",
 
   initialize: function() {
+    // _.bindAll(this, 'render');
+
+
+    this.collection.on('remove', this.render, this);
+    this.on('enqueue', this.enqueue);
+    this.on('dequeue', this.dequeue);
+
     this.render();
   	},
 

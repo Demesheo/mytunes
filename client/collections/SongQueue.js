@@ -4,26 +4,40 @@ var SongQueue = Songs.extend({
 
 
   initialize: function(){
-
+    _.bindAll(this, "enqueue", "dequeue", "playNext"); 
+    // console.log("before this", this);
+    // console.log(window.Backbone.Events)
+    this.bind("ended", this.playNext);
+    this.bind("enqueue", this.enqueue);
+    this.bind("dequeue", this.dequeue);
+    // console.log("after this",this)
   },
 
   playFirst: function(song){
-    // console.log('song',song);
+    // console.log("SongQueue");
     this.models[0].play();
   },
 
   playNext: function(){
-
+    this.remove(this.models[0]);
+    if(this.length>0){
+      this.playFirst();
+    }
   },
 
   enqueue: function(song){
     this.add(song);
-    this.render();
+    if(this.length === 0){
+      this.playFirst();
+    }
   },
 
-  dequeue: function(song){
-    this.remove(song);
-  }
+    dequeue: function(song){
+      this.remove(song);
+      if(this.length>0){
+        this.playFirst();
+      }
+    }
 
   // render: function(){
   //   // to preserve event handlers on child nodes, we must call .detach() on them before overwriting with .html()
